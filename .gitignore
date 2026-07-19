@@ -1,0 +1,4 @@
+/limine-binary
+/edk2-ovmf-bins
+*.iso
+*.hdd
