@@ -2,7 +2,7 @@
 .SUFFIXES:
 
 # Target architecture to build for. Default to x86_64.
-ARCH := x86_64
+ARCH := aarch64
 
 # Default user QEMU flags. These are appended to the QEMU command calls.
 QEMUFLAGS := -m 2G
