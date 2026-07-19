@@ -114,7 +114,7 @@ void draw_bitmap(const struct limine_framebuffer *frame_buffer, const bitmap_hea
     const uint32_t pixel_count = (header->width * header->height);
     const uint32_t pixel_padding = 8;
 
-    for (int32_t pixel_index = 0; pixel_index < pixel_count; pixel_index++)
+    for (uint32_t pixel_index = 0; pixel_index < pixel_count; pixel_index++)
     {
         if ((pixel_index != 0) && (0 == (pixel_index % header->width))) {
             y_offset++;
