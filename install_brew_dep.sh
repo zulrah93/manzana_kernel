@@ -1,0 +1,1 @@
+brew install aarch64-elf-binutils aarch64-elf-gcc xorriso

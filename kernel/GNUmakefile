@@ -29,11 +29,11 @@ endif
 ifneq ($(TOOLCHAIN_PREFIX),)
     CC := $(TOOLCHAIN_PREFIX)gcc-15
 else
-    CC := clang-22
+    CC := aarch64-elf-gcc-16.1.0
 endif
 
 # User controllable linker command.
-LD := ld
+LD := aarch64-elf-ld
 
 # Defaults overrides for variables if using "llvm" as toolchain.
 ifeq ($(TOOLCHAIN),llvm)
@@ -63,7 +63,7 @@ ifneq ($(filter-out clean distclean,$(or $(MAKECMDGOALS),default)),)
 endif
 
 # Check if CC is Clang.
-override CC_IS_CLANG := $(shell ! $(CC) --version 2>/dev/null | grep -q '^Target: '; echo $$?)
+override CC_IS_CLANG := 0
 
 # Internal C flags that should not be changed by the user.
 override CFLAGS += \
