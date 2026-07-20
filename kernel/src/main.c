@@ -54,10 +54,13 @@ void kmain(void) {
         halt_catch_fire();
     }
 
+    bitmap_header_t* boot_logo_bmp_header = get_embedded_boot_logo();
+
     // Fetch the first framebuffer.
     struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
 
    clear_screen(framebuffer, BLUE);
+   draw_bitmap(framebuffer, boot_logo_bmp_header, 0, 0);
 
     // We're done, just hang...
     halt_catch_fire();

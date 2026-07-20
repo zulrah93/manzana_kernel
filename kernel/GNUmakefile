@@ -192,9 +192,9 @@ all: bin-$(ARCH)/$(OUTPUT)
 # Link rules for the final executable.
 bin-$(ARCH)/$(OUTPUT): GNUmakefile linker-scripts/$(ARCH).lds $(OBJ)
 	mkdir -p "$(dir $@)"
-	aarch64-elf-objcopy -I binary src/font.psf obj/font.psf.o
-	aarch64-elf-objcopy -I binary src/boot_logo.bmp obj/boot_logo.bmp.o
-	$(LD) $(LDFLAGS) $(OBJ) -o $@
+	aarch64-elf-objcopy -O elf64-littleaarch64 -B aarch64 -I binary src/font.psf obj/font.psf.o
+	aarch64-elf-objcopy -O elf64-littleaarch64 -B aarch64 -I binary src/boot_logo.bmp obj/boot_logo.bmp.o
+	$(LD) $(LDFLAGS) $(OBJ) obj/font.psf.o obj/boot_logo.bmp.o -o $@
 
 # Compilation rules for *.c files.
 obj-$(ARCH)/%.c.o: %.c GNUmakefile
