@@ -23,8 +23,9 @@ typedef struct {
     uint32_t width;         /* width in pixels */
 } PSF_font;
 
-#define ROW_VGA_ADDRESS 0xffff80000000e000
-#define COLUMN_VGA_ADDRESS 0xffff80000000f000
+                        
+static uint32_t INTERNAL_ROW = 0;
+static uint32_t INTERNAL_COLUMN = 0; 
 
 
 extern PSF_font _binary_src_font_psf_start;
@@ -49,8 +50,8 @@ void fill_glyph(const struct limine_framebuffer * frame_buffer, const uint32_t r
     const uint32_t max_columns =  (frame_buffer->width / font_handle->width) + 1;
     const uint32_t max_rows =  (frame_buffer->height / font_handle->height) + 1;
 
-    uint32_t row = *((uint32_t*)(ROW_VGA_ADDRESS));
-    uint32_t column = *((uint32_t*)(COLUMN_VGA_ADDRESS));
+    uint32_t row = INTERNAL_ROW;
+    uint32_t column = INTERNAL_COLUMN;
 
     volatile uint8_t* font_bmp = (uint8_t*)&_binary_src_font_psf_start;
     font_bmp += font_handle->headersize;
@@ -94,8 +95,8 @@ void put_glyph(const struct limine_framebuffer * frame_buffer, uint8_t glyph_ind
 }
 
 void set_cursor_position(uint32_t row, uint32_t column) {
-    *((uint32_t*)(ROW_VGA_ADDRESS)) = row;
-    *((uint32_t*)(COLUMN_VGA_ADDRESS)) = column;
+    INTERNAL_ROW = row;
+    INTERNAL_COLUMN = column;
 }
 
 #define reset_cursor_position() set_cursor_position(0,0)
@@ -105,8 +106,8 @@ void printk(const struct limine_framebuffer * frame_buffer, char* string, const 
     PSF_font* font_handle = get_pc_screen_font_handle();
     PSF_font* font_metadata = &_binary_src_font_psf_start;
     const uint32_t max_columns =  (frame_buffer->width / font_metadata->width) + 1;
-    uint32_t row = *((uint32_t*)(ROW_VGA_ADDRESS));
-    uint32_t column = *((uint32_t*)(COLUMN_VGA_ADDRESS));
+    uint32_t row = INTERNAL_ROW;
+    uint32_t column = INTERNAL_COLUMN;
     while(*string != '\0') {
         char c = *string;
         if (c == '\n' || column >= max_columns) {
@@ -120,8 +121,8 @@ void printk(const struct limine_framebuffer * frame_buffer, char* string, const 
         string++;
     }
 
-    *((uint32_t*)(ROW_VGA_ADDRESS)) = row;
-    *((uint32_t*)(COLUMN_VGA_ADDRESS)) = column;
+    INTERNAL_ROW = row;
+    INTERNAL_COLUMN = column;
 
 }
 
