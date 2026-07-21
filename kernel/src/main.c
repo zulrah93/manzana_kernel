@@ -24,6 +24,12 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
     .revision = 0
 };
 
+__attribute__((used, section(".limine_requests")))
+static volatile struct limine_memmap_request memmap_request = {
+    .id = LIMINE_MEMMAP_REQUEST_ID,
+    .revision = 0
+};
+
 // Finally, define the start and end markers for the Limine requests.
 // These can also be moved anywhere, to any .c file, as seen fit.
 
@@ -54,6 +60,11 @@ void kmain(void) {
      || framebuffer_request.response->framebuffer_count < 1) {
         halt_catch_fire();
     }
+
+    const size_t entry_count = memmap_request.response->entry_count; 
+    struct limine_memmap_entry** entries = memmap_request.response->entries;
+
+    //init_memory_pool(entries, entry_count);
 
     bitmap_header_t* boot_logo_bmp_header = get_embedded_boot_logo();
 
