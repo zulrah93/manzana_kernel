@@ -78,15 +78,25 @@ typedef struct {
 #define HEAP_CAPACITY 50000
 static heap_header_t* start_of_heap = NULL;
 static size_t heap_usage_bytes = 0; // Includes meta information as well 
+static uint8_t  stack[HEAP_CAPACITY];
 
-bool init_memory_pool(struct limine_memmap_entry** entries, const size_t entries_size) {
+bool init_memory_pool(struct limine_memmap_entry** entries, const size_t entries_size, bool use_stack) {
     if (NULL == entries) {
         return false;
     }
 
+    if (use_stack) {
+         start_of_heap = (heap_header_t*)stack;
+         heap_usage_bytes = 0;
+         memset(start_of_heap, 0, sizeof(heap_header_t));
+         start_of_heap->is_free = true;
+         start_of_heap->block_size_bytes = 0;
+         return true;
+    }
+
     for(size_t index = 0; index < entries_size; index++) {
         if (entries[index]->type == LIMINE_MEMMAP_USABLE) {
-            start_of_heap = (heap_header_t*)(entries[index]->base + SLIDE_ADDRESS + 100000);
+            start_of_heap = (heap_header_t*)(entries[index]->base);
             memset(start_of_heap, 0, sizeof(heap_header_t));
             start_of_heap->is_free = true;
             start_of_heap->block_size_bytes = 0;

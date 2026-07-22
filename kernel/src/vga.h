@@ -84,6 +84,14 @@ void plot_pixel(const struct limine_framebuffer *frame_buffer, const uint32_t x,
     vga_buffer[(y * width) + x + 1] = rgb;
 }
 
+void plot_pattern(const struct limine_framebuffer* frame_buffer) {
+    for (uint32_t x = 0; x < frame_buffer->width; x++) {
+        for(uint32_t y = 0; y < frame_buffer->height; y++) {
+            plot_pixel(frame_buffer, x, y, 2*x+y);
+        }
+    }
+}
+
 void draw_bitmap(const struct limine_framebuffer *frame_buffer, const bitmap_header_t *header, const uint32_t x, const uint32_t y)
 {
 

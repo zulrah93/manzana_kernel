@@ -5,6 +5,7 @@
 #include <memory.h>
 #include <vga.h>
 #include <fonts.h>
+#include <kernel_string.h>
 
 // Set the base revision to 6, this is recommended as this is the latest
 // base revision described by the Limine boot protocol specification.
@@ -60,11 +61,13 @@ void kmain(void) {
      || framebuffer_request.response->framebuffer_count < 1) {
         halt_catch_fire();
     }
+    
+    
 
     const size_t entry_count = memmap_request.response->entry_count; 
     struct limine_memmap_entry** entries = memmap_request.response->entries;
 
-    //init_memory_pool(entries, entry_count);
+    init_memory_pool(entries, entry_count, true);
 
     bitmap_header_t* boot_logo_bmp_header = get_embedded_boot_logo();
 
@@ -73,13 +76,10 @@ void kmain(void) {
 
    clear_screen(framebuffer, BLUE);
    draw_bitmap(framebuffer, boot_logo_bmp_header, 0, 280);
-   printk(framebuffer, "Manzana Kernel Booted", WHITE);
-
-   /*for (uint32_t x = 0; x < framebuffer->width; x++) {
-        for(uint32_t y = 0; y < framebuffer->height; y++) {
-            plot_pixel(framebuffer, x, y, 2*x+y);
-        }
-   }*/
+   reset_cursor_position();
+   kernel_string bootup_string;
+   append_c_str_to_kernel_string(&bootup_string, "Manzana kernel booted");
+   print_kernel_string(framebuffer, bootup_string, WHITE);
 
     // We're done, just hang...
     halt_catch_fire();

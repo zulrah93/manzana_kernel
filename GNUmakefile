@@ -7,7 +7,7 @@ ARCH := aarch64
 # Default user QEMU flags. These are appended to the QEMU command calls.
 QEMUFLAGS := -m 2G
 
-override IMAGE_NAME := template-$(ARCH)
+override IMAGE_NAME := manzana-kernel
 
 # Toolchain for building the 'limine' executable for the host.
 HOST_CC := cc
