@@ -6,6 +6,7 @@
 #include <vga.h>
 #include <fonts.h>
 #include <kernel_string.h>
+#include <system.h>
 
 // Set the base revision to 6, this is recommended as this is the latest
 // base revision described by the Limine boot protocol specification.
@@ -74,13 +75,18 @@ void kmain(void) {
     // Fetch the first framebuffer.
     struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
 
-   clear_screen(framebuffer, BLUE);
-   draw_bitmap(framebuffer, boot_logo_bmp_header, 0, 280);
-   reset_cursor_position();
-   kernel_string bootup_string;
-   append_c_str_to_kernel_string(&bootup_string, "Manzana kernel booted");
-   print_kernel_string(framebuffer, bootup_string, WHITE);
-
+    clear_screen(framebuffer, BLUE);
+    draw_bitmap(framebuffer, boot_logo_bmp_header, 0, 280);
+    reset_cursor_position();
+    kernel_string kernel_buffer;
+    create_empty_kernel_string(&kernel_buffer, 512);
+    append_c_str_to_kernel_string(&kernel_buffer, "Manzana Kernel\nCNTPCT_EL0 has a value of ");
+    append_integer_to_kernel_string(&kernel_buffer, get_system_ticks());
+    print_kernel_string(framebuffer, kernel_buffer, WHITE);
+    //char* buffer = k_malloc(256);
+    //memset(buffer, 0, sizeof(buffer));
+    //memcpy(buffer, "Manazana kernel", sizeof("Manzana Kernel"));
+    //printk(framebuffer, buffer, WHITE);
     // We're done, just hang...
     halt_catch_fire();
 }
