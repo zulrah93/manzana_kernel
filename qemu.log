@@ -9,136 +9,59 @@ Taking exception 11 [Hypervisor Call] on CPU 0
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3810000
-...with SPSR 0x80000305
-...with ELR 0xbf8124d8
+...with SPSR 0x20000305
+...with ELR 0xbf2982c0
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf8124d8
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf2982c0
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3c18000
 ...with SPSR 0x80000305
-...with ELR 0x479673d8
+...with ELR 0x47956d0c
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0x479673d8
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x47956d0c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x3c18000
+...with SPSR 0xa0000305
+...with ELR 0x47954000
+...to EL1 PC 0xbf800280 PSTATE 0x3c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x47954000
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3810000
-...with SPSR 0x80000305
-...with ELR 0xbf7ff69c
+...with SPSR 0x60000305
+...with ELR 0xbf251984
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf7ff69c
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3800000
-...with SPSR 0x20000305
-...with ELR 0xbf003650
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf003650
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf251984
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3410000
-...with SPSR 0x60000305
-...with ELR 0xbf7b2630
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf7b2630
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3410000
-...with SPSR 0x20000305
-...with ELR 0xbeffc010
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbeffc010
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3010000
-...with SPSR 0x305
-...with ELR 0x4795f874
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4795f874
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3810000
 ...with SPSR 0x80000305
-...with ELR 0x479662ac
+...with ELR 0xbf7ff69c
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0x479662ac
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf7ff69c
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
-...with ESR 0x0/0x3810000
-...with SPSR 0x20000305
-...with ELR 0x4795f0b4
+...with ESR 0x0/0x3c18000
+...with SPSR 0xa0000305
+...with ELR 0xbeffec58
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4795f0b4
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3810000
-...with SPSR 0x20000305
-...with ELR 0x47966298
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0x47966298
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3010000
-...with SPSR 0x60000305
-...with ELR 0x479551c4
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0x479551c4
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbeffec58
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3c18000
 ...with SPSR 0x60000305
-...with ELR 0xbefbe738
+...with ELR 0xbf252e34
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbefbe738
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf252e34
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
-...with ESR 0x0/0x3810000
+...with ESR 0x0/0x3010000
 ...with SPSR 0x80000305
-...with ELR 0xbf7ff69c
+...with ELR 0xbf080508
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf7ff69c
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3810000
-...with SPSR 0x80000305
-...with ELR 0xbf7ff69c
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf7ff69c
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3810000
-...with SPSR 0x80000305
-...with ELR 0xbf7ff69c
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf7ff69c
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3810000
-...with SPSR 0x80000305
-...with ELR 0xbf7ff69c
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf7ff69c
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3810000
-...with SPSR 0x80000305
-...with ELR 0xbf7ff69c
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf7ff69c
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3400000
-...with SPSR 0x80000305
-...with ELR 0xbf1738b4
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf1738b4
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3c18000
-...with SPSR 0x60000305
-...with ELR 0xbf1592e4
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf1592e4
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf080508
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3800000
@@ -148,11 +71,32 @@ Taking exception 5 [IRQ] on CPU 0
 Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf7f2b74
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
-...with ESR 0x0/0x3800000
+...with ESR 0x0/0x3410000
 ...with SPSR 0x60000305
-...with ELR 0xbf7b27cc
+...with ELR 0xbefdcd0c
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf7b27cc
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbefdcd0c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x3810000
+...with SPSR 0x80000305
+...with ELR 0xbf80b124
+...to EL1 PC 0xbf800280 PSTATE 0x3c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf80b124
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x3810000
+...with SPSR 0x80000305
+...with ELR 0xbf80b124
+...to EL1 PC 0xbf800280 PSTATE 0x3c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf80b124
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x3800000
+...with SPSR 0x80000305
+...with ELR 0xbf80b124
+...to EL1 PC 0xbf800280 PSTATE 0x3c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf80b124
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3810000
@@ -225,6 +169,20 @@ Taking exception 5 [IRQ] on CPU 0
 Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf80b124
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
+...with ESR 0x0/0x3810000
+...with SPSR 0x80000305
+...with ELR 0xbf80b124
+...to EL1 PC 0xbf800280 PSTATE 0x3c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf80b124
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x3800000
+...with SPSR 0x80000305
+...with ELR 0xbf80b124
+...to EL1 PC 0xbf800280 PSTATE 0x3c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf80b124
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
 ...with ESR 0x0/0x3800000
 ...with SPSR 0x80000305
 ...with ELR 0xbf80b124
@@ -247,34 +205,6 @@ Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf80b124
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3800000
-...with SPSR 0x80000305
-...with ELR 0xbf80b124
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf80b124
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3810000
-...with SPSR 0x80000305
-...with ELR 0xbf80b124
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf80b124
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3800000
-...with SPSR 0x80000305
-...with ELR 0xbf80b124
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf80b124
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3810000
-...with SPSR 0x80000305
-...with ELR 0xbf80b124
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf80b124
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3810000
 ...with SPSR 0x80000305
 ...with ELR 0xbf80b124
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
@@ -401,13 +331,6 @@ Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf80b124
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3810000
-...with SPSR 0x80000305
-...with ELR 0xbf80b124
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf80b124
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3800000
 ...with SPSR 0x80000305
 ...with ELR 0xbf80b124
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
@@ -415,10 +338,31 @@ Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf80b124
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3000000
-...with SPSR 0xa0000305
-...with ELR 0x4796949c
+...with SPSR 0x80000305
+...with ELR 0xbf7ff69c
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0x4796949c
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf7ff69c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x3800000
+...with SPSR 0x60000305
+...with ELR 0xbf199a5c
+...to EL1 PC 0xbf800280 PSTATE 0x3c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf199a5c
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x3410000
+...with SPSR 0x60000305
+...with ELR 0x47955314
+...to EL1 PC 0xbf800280 PSTATE 0x3c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0x47955314
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x3810000
+...with SPSR 0x80000305
+...with ELR 0xbf7ff69c
+...to EL1 PC 0xbf800280 PSTATE 0x3c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf7ff69c
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3410000
@@ -426,30 +370,9 @@ Taking exception 5 [IRQ] on CPU 0
 ...with ELR 0xbf80b124
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
 Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf80b124
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3410000
-...with SPSR 0x80000305
-...with ELR 0x47954150
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0x47954150
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3810000
-...with SPSR 0x80000305
-...with ELR 0xbf6a12f8
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf6a12f8
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3010000
-...with SPSR 0x60000305
-...with ELR 0xbece8e54
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbece8e54
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3800000
 ...with SPSR 0x20000305
 ...with ELR 0xbecf1ab8
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
@@ -493,9 +416,16 @@ Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3800000
 ...with SPSR 0x20000305
-...with ELR 0x47954d90
+...with ELR 0xbecf1ab8
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0x47954d90
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbecf1ab8
+Taking exception 5 [IRQ] on CPU 0
+...from EL1 to EL1
+...with ESR 0x0/0x3800000
+...with SPSR 0x20000305
+...with ELR 0xbecf1ab8
+...to EL1 PC 0xbf800280 PSTATE 0x3c5
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbecf1ab8
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3410000
@@ -507,16 +437,16 @@ Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3410000
 ...with SPSR 0x60000305
-...with ELR 0xbed0febc
+...with ELR 0xbed0fe40
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbed0febc
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbed0fe40
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3800000
 ...with SPSR 0x80000305
-...with ELR 0xbed1057c
+...with ELR 0xbed10d44
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbed1057c
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbed10d44
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3800000
@@ -2620,10 +2550,10 @@ Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbf7ffa04
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3810000
-...with SPSR 0x80000305
-...with ELR 0xbeceea38
+...with SPSR 0x60000305
+...with ELR 0xbece7c68
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbeceea38
+Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbece7c68
 Taking exception 5 [IRQ] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x0/0x3410000
@@ -2638,13 +2568,6 @@ Taking exception 5 [IRQ] on CPU 0
 ...with ELR 0xbecf1a58
 ...to EL1 PC 0xbf800280 PSTATE 0x3c5
 Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbecf1a58
-Taking exception 5 [IRQ] on CPU 0
-...from EL1 to EL1
-...with ESR 0x0/0x3410000
-...with SPSR 0x60000305
-...with ELR 0xbed09420
-...to EL1 PC 0xbf800280 PSTATE 0x3c5
-Exception return from AArch64 EL1 to AArch64 EL1 PC 0xbed09420
 Taking exception 3 [Prefetch Abort] on CPU 0
 ...from EL1 to EL1
 ...with ESR 0x21/0x86000004

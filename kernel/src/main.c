@@ -77,11 +77,15 @@ void kmain(void) {
     draw_bitmap(framebuffer, boot_logo_bmp_header, 0, 280);
     reset_cursor_position();
     kernel_string kernel_buffer;
-    create_empty_kernel_string(&kernel_buffer, 512);
+    create_empty_kernel_string(&kernel_buffer, 1024);
     append_c_str_to_kernel_string(&kernel_buffer, "Manzana Kernel\nCNTPCT_EL0 has a value of ");
     append_integer_to_kernel_string(&kernel_buffer, get_system_ticks());
     append_c_str_to_kernel_string(&kernel_buffer, " and we are at exception level ");
-    append_hex_to_kernel_string(&kernel_buffer, get_current_exception_level().level);
+    append_integer_to_kernel_string(&kernel_buffer, get_current_exception_level().level);
+    append_c_str_to_kernel_string(&kernel_buffer, " and SCTLR_EL1 is 0x");
+    append_hex_to_kernel_string(&kernel_buffer, get_sctrl_el1());
+    append_c_str_to_kernel_string(&kernel_buffer, "\nIs this machine little endian? ");
+    append_c_str_to_kernel_string(&kernel_buffer, is_little_endian_system() ? "yes" : "no");
     print_kernel_string(framebuffer, kernel_buffer, WHITE);
     // We're done, just hang...
     halt_catch_fire();
