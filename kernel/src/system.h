@@ -9,4 +9,17 @@ uint64_t get_system_ticks() {
     return register_value;
 }
 
+typedef struct {
+    uint8_t reserved_1 : 2;
+    uint8_t level : 2;
+    uint64_t reserved_2 : 60;
+} exception_level_t;
+
+uint8_t get_current_exception_level() {
+    uint64_t encoded_el;
+    asm("MRS %x[data], CurrentEl" : [data] "=r" (encoded_el));
+    exception_level_t* el_info = (exception_level_t*)&encoded_el;
+    return el_info->level;
+}
+
 #endif

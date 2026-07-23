@@ -63,8 +63,6 @@ void kmain(void) {
         halt_catch_fire();
     }
     
-    
-
     const size_t entry_count = memmap_request.response->entry_count; 
     struct limine_memmap_entry** entries = memmap_request.response->entries;
 
@@ -82,11 +80,9 @@ void kmain(void) {
     create_empty_kernel_string(&kernel_buffer, 512);
     append_c_str_to_kernel_string(&kernel_buffer, "Manzana Kernel\nCNTPCT_EL0 has a value of ");
     append_integer_to_kernel_string(&kernel_buffer, get_system_ticks());
+    append_c_str_to_kernel_string(&kernel_buffer, " and we are at exception level ");
+    append_hex_to_kernel_string(&kernel_buffer, get_current_exception_level());
     print_kernel_string(framebuffer, kernel_buffer, WHITE);
-    //char* buffer = k_malloc(256);
-    //memset(buffer, 0, sizeof(buffer));
-    //memcpy(buffer, "Manazana kernel", sizeof("Manzana Kernel"));
-    //printk(framebuffer, buffer, WHITE);
     // We're done, just hang...
     halt_catch_fire();
 }
