@@ -81,7 +81,7 @@ void kmain(void) {
     append_c_str_to_kernel_string(&kernel_buffer, "Manzana Kernel\nCNTPCT_EL0 has a value of ");
     append_integer_to_kernel_string(&kernel_buffer, get_system_ticks());
     append_c_str_to_kernel_string(&kernel_buffer, " and we are at exception level ");
-    append_hex_to_kernel_string(&kernel_buffer, get_current_exception_level());
+    append_hex_to_kernel_string(&kernel_buffer, get_current_exception_level().level);
     print_kernel_string(framebuffer, kernel_buffer, WHITE);
     // We're done, just hang...
     halt_catch_fire();
