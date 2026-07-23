@@ -4,4 +4,4 @@ Jokingly called manzana kernel just for fun maybe I work on it more like my OS.1
 
 # Screenshot
 
-<img width="1030" height="826" alt="image" src="https://github.com/user-attachments/assets/ef3c0e27-f2d2-4b27-8fbf-e0096dda47e7" />
+<img width="1030" height="826" alt="image" src="https://github.com/user-attachments/assets/87c75d04-7cf6-4644-87ff-4898698da054" />
