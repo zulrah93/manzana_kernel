@@ -85,7 +85,10 @@ void kmain(void) {
     append_c_str_to_kernel_string(&kernel_buffer, " and SCTLR_EL1 is 0x");
     append_hex_to_kernel_string(&kernel_buffer, get_sctrl_el1());
     append_c_str_to_kernel_string(&kernel_buffer, "\nIs this machine little endian? ");
-    append_c_str_to_kernel_string(&kernel_buffer, is_little_endian_system() ? "yes" : "no");
+    append_c_str_to_kernel_string(&kernel_buffer, is_little_endian_system() ? "yes and is FEAT_RNG_TRAP supported? " : "no and is FEAT_RNG_TRAP supported?");
+    aarch64_processor_feature_t aarch64 = get_id_aa64pfr1_el1_register_decoded();
+    append_c_str_to_kernel_string(&kernel_buffer, aarch64.feat_rng_trap ? " yes and is FEAT_DoubleFault2 supported? " : " no FEAT_DoubleFault2 is supported? ");
+    append_c_str_to_kernel_string(&kernel_buffer, aarch64.feat_df2 ? "yes" : "no");
     print_kernel_string(framebuffer, kernel_buffer, WHITE);
     // We're done, just hang...
     halt_catch_fire();
