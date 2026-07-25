@@ -63,4 +63,26 @@ aarch64_processor_feature_t get_id_aa64pfr1_el1_register_decoded() {
     aarch64_processor_feature_t* decoded_value = (aarch64_processor_feature_t*)&register_value;
     return *decoded_value;
 }
+
+typedef struct {
+    uint8_t revision_id : 4;
+    uint16_t part_number : 12;
+    uint8_t architecture : 4;
+    uint8_t variant : 4;
+    uint8_t implementer_code;
+    uint32_t reserved;
+} aarch64_main_id_register_t;
+
+uint64_t get_main_id_register() {
+    uint64_t register_value;
+    asm("MRS %x[data], MIDR_EL1" : [data] "=r" (register_value));
+    return register_value;
+}
+
+aarch64_main_id_register_t get_main_id_register_decoded() {
+    uint64_t register_value = get_main_id_register();
+    aarch64_main_id_register_t* decoded_value = (aarch64_main_id_register_t*)&register_value;
+    return *decoded_value;
+}
+
 #endif
