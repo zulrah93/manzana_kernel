@@ -85,4 +85,43 @@ aarch64_main_id_register_t get_main_id_register_decoded() {
     return *decoded_value;
 }
 
+typedef struct {
+    uint8_t mmu_enabled : 1;
+    uint8_t alignment_check_enabled : 1;
+    uint8_t cache_enable : 1;
+    uint8_t sp_align_check_enabled : 1;
+    uint8_t el0_stack_align_check_enabled : 1;
+    uint8_t cp15_barrier_enabled : 1;
+    uint8_t reservered_0 : 1;
+    uint8_t itd_instruction_disable : 1;
+    uint8_t setend_instruction_disable : 1;
+    uint8_t user_mask_access_enable : 1;
+    uint8_t reserved_1 : 2;
+    uint8_t instruction_cache_enable : 1;
+    uint8_t reserved_3 : 1;
+    uint8_t dc_zva_instructions_el0_enable : 1;
+    uint8_t enable_el0_ctr_el0 : 1;
+    uint8_t wfi_traps : 1;
+    uint8_t reserved_4 : 1;
+    uint8_t wfe_traps : 1;
+    uint8_t write_executes_never : 1;
+    uint8_t reserved_5 : 4;
+    uint8_t data_access_el0_is_big_endian : 1;
+    uint8_t exceptions_are_big_endian : 1;
+    uint8_t enable_uci : 1;
+    uint8_t reserved_6 : 5;
+} aarch64_system_control_register_t;
+
+uint32_t get_system_control_register() {
+    uint32_t register_value;
+    asm("MRS %x[data], SCTLR_EL1" : [data] "=r" (register_value));
+    return register_value;
+}
+
+aarch64_system_control_register_t get_system_control_register_decoded() {
+    uint32_t register_value = get_system_control_register();
+    aarch64_system_control_register_t* decoded_value = (aarch64_system_control_register_t*)&register_value;
+    return *decoded_value;
+}
+
 #endif

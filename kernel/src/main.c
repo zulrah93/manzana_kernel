@@ -92,6 +92,8 @@ void kmain(void) {
     aarch64_main_id_register_t main_id = get_main_id_register_decoded();
     uint8_t implementer_code = main_id.implementer_code;
     append_hex_to_kernel_string(&kernel_buffer, implementer_code);
+    aarch64_system_control_register_t system_control_register = get_system_control_register_decoded();
+    append_c_str_to_kernel_string(&kernel_buffer,  system_control_register.mmu_enabled ? " MMU is enabled" : " MMU is not enabled");
     print_kernel_string(framebuffer, kernel_buffer, WHITE);
     // We're done, just hang...
     halt_catch_fire();
