@@ -94,7 +94,16 @@ void kmain(void) {
     append_hex_to_kernel_string(&kernel_buffer, implementer_code);
     aarch64_system_control_register_t system_control_register = get_system_control_register_decoded();
     append_c_str_to_kernel_string(&kernel_buffer,  system_control_register.mmu_enabled ? " MMU is enabled and is WFI trapping? " : " MMU is not enabled and is WFI trapping? ");
-    append_c_str_to_kernel_string(&kernel_buffer, system_control_register.wfi_traps ? "yes" : "no");
+    append_c_str_to_kernel_string(&kernel_buffer, system_control_register.wfi_traps ? "yes\nMAIR_EL1 [ " : "no\nMAIR_EL1 [ ");
+    aarch64_memory_indirection_register_t memory_indir_register = get_memory_indirection_register_el1_decoded();
+    for(size_t index = 0; index < 8; index++) {
+       append_c_str_to_kernel_string(&kernel_buffer, "0x");
+       append_hex_to_kernel_string(&kernel_buffer, memory_indir_register.attributes[index]);
+       append_c_str_to_kernel_string(&kernel_buffer, " ");
+    }
+    append_c_str_to_kernel_string(&kernel_buffer, " ] and base address of top level page table is 0x");
+    aarch64_translation_table_base_register_1_t ttb = get_translation_table_base_register_1_el1_decoded();
+    append_hex_to_kernel_string(&kernel_buffer, ttb.base_address);
     print_kernel_string(framebuffer, kernel_buffer, WHITE);
     // We're done, just hang...
     halt_catch_fire();

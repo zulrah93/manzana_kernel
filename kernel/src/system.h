@@ -130,4 +130,23 @@ void set_system_control_register(aarch64_system_control_register_t scr_encoded) 
     asm("MSR SCTLR_EL1, %x[data]" :: [data] "r" (*scr_decoded) : "memory");
 }
 
+typedef struct {
+    uint8_t attributes[8];
+} aarch64_memory_indirection_register_t;
+
+uint64_t get_memory_indirection_register_el1() {
+    uint64_t register_value;
+    asm("MRS %x[data], MAIR_EL1" : [data] "=r" (register_value));
+    return register_value;
+}
+
+aarch64_memory_indirection_register_t get_memory_indirection_register_el1_decoded() {
+    uint64_t register_value = get_memory_indirection_register_el1();
+    aarch64_memory_indirection_register_t* decoded_value = (aarch64_memory_indirection_register_t*)&register_value;
+    return *decoded_value;
+}
+
+// Include the virtual memory management stuff 
+#include <paging.h>
+
 #endif
