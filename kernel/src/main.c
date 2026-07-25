@@ -93,7 +93,8 @@ void kmain(void) {
     uint8_t implementer_code = main_id.implementer_code;
     append_hex_to_kernel_string(&kernel_buffer, implementer_code);
     aarch64_system_control_register_t system_control_register = get_system_control_register_decoded();
-    append_c_str_to_kernel_string(&kernel_buffer,  system_control_register.mmu_enabled ? " MMU is enabled" : " MMU is not enabled");
+    append_c_str_to_kernel_string(&kernel_buffer,  system_control_register.mmu_enabled ? " MMU is enabled and is WFI trapping? " : " MMU is not enabled and is WFI trapping? ");
+    append_c_str_to_kernel_string(&kernel_buffer, system_control_register.wfi_traps ? "yes" : "no");
     print_kernel_string(framebuffer, kernel_buffer, WHITE);
     // We're done, just hang...
     halt_catch_fire();

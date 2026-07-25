@@ -124,4 +124,10 @@ aarch64_system_control_register_t get_system_control_register_decoded() {
     return *decoded_value;
 }
 
+
+void set_system_control_register(aarch64_system_control_register_t scr_encoded) {
+    uint32_t* scr_decoded = (uint32_t*)&scr_encoded;
+    asm("MSR SCTLR_EL1, %x[data]" :: [data] "r" (*scr_decoded) : "memory");
+}
+
 #endif
