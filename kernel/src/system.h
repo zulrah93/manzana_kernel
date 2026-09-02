@@ -9,6 +9,12 @@ uint64_t get_system_ticks() {
     return register_value;
 }
 
+uint64_t get_counter_timer_frequency() {
+    uint64_t register_value;
+    asm("MRS %x[data], CNTFRQ_EL0" : [data] "=r" (register_value));
+    return register_value;
+}
+
 typedef struct {
     uint8_t reserved_1 : 2;
     uint8_t level : 2;

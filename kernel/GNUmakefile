@@ -29,7 +29,7 @@ endif
 ifneq ($(TOOLCHAIN_PREFIX),)
     CC := $(TOOLCHAIN_PREFIX)gcc-15
 else
-    CC := aarch64-elf-gcc-16.1.0
+    CC := aarch64-elf-gcc-16.2.0
 endif
 
 # User controllable linker command.

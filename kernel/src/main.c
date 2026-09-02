@@ -80,7 +80,9 @@ void kmain(void) {
     create_empty_kernel_string(&kernel_buffer, 1024);
     append_c_str_to_kernel_string(&kernel_buffer, "Manzana Kernel\nCNTPCT_EL0 has a value of ");
     append_integer_to_kernel_string(&kernel_buffer, get_system_ticks());
-    append_c_str_to_kernel_string(&kernel_buffer, " and we are at exception level ");
+    append_c_str_to_kernel_string(&kernel_buffer, "CPU base frequency is ");
+    append_integer_to_kernel_string(&kernel_buffer, get_counter_timer_frequency() / 1000000);
+    append_c_str_to_kernel_string(&kernel_buffer, " Hz\nAnd we are at exception level ");
     append_integer_to_kernel_string(&kernel_buffer, get_current_exception_level().level);
     append_c_str_to_kernel_string(&kernel_buffer, " and SCTLR_EL1 is 0x");
     append_hex_to_kernel_string(&kernel_buffer, get_sctrl_el1());
