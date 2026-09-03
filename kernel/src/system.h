@@ -108,7 +108,7 @@ pmuacr_el1_t get_pmuacr_el1_decoded() {
     return *decoded;
 }
 
-uint64_t get_current_cpu_frequency_el1() {
+uint64_t get_current_cpu_frequency_el0() {
     pmcr_el0_t pmcr = get_pmcr_el0_decoded();
     pmcr.enable = 1;
     pmcr.number_of_event_counters = 1;
