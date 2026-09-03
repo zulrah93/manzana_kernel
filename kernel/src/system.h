@@ -15,6 +15,12 @@ uint64_t get_counter_timer_frequency() {
     return register_value;
 }
 
+uint32_t get_pmcr_el0() {
+    uint32_t register_value;
+    asm("MRS %x[data], PMCR_EL0" : [data] "=r" (register_value));
+    return register_value;
+}
+
 uint64_t get_pmccntr_el0() {
     uint64_t register_value;
     asm("MRS %x[data], PMCCNTR_EL0" : [data] "=r" (register_value));
@@ -32,6 +38,27 @@ uint64_t get_pmuacr_el1() {
     uint64_t register_value;
     asm("MRS %x[data], PMUACR_EL1" : [data] "=r" (register_value));
     return register_value;
+}
+
+//https://support.arm.com/documentation/100442/0100/debug-registers/aarch64-pmu-registers/pmcr-el0--performance-monitors-control-register--el0
+typedef struct {
+    uint8_t enable : 1;
+    uint8_t event_counter_reset : 1;
+    uint8_t clock_counter_reset : 1;
+    uint8_t enable_clock_divider : 1;
+    uint8_t export_enable : 1;
+    uint8_t disable_cycle_counter : 1;
+    uint8_t enable_long_cycle_count : 1;
+    uint8_t reserved_1 : 4;
+    uint8_t number_of_event_counters : 5;
+    uint8_t id_code;
+    uint8_t implementer_code;
+} pmcr_el0_t;
+
+pmcr_el0_t get_pmcr_el0_decoded() {
+    uint32_t value = get_pmcr_el0();
+    pmcr_el0_t* decoded = (pmcr_el0_t*)&value;
+    return *decoded;
 }
 
 typedef struct {
