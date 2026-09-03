@@ -45,6 +45,10 @@ typedef struct {
     uint64_t reserved : 56;
 } pmsuserenr_el0_t;
 
+void set_pmsuserenr_el0(pmsuserenr_el0_t encoded_value) {
+    uint64_t* decoded = (uint64_t*)&encoded_value;
+    asm("MSR PMUSERENR_EL0, %x[data]" :: [data] "r" (*decoded) : "memory");
+}
 
 pmsuserenr_el0_t get_pmsuserenr_el0_decoded() {
     uint64_t value = get_pmsuserenr_el0();
@@ -59,14 +63,33 @@ typedef struct {
     uint32_t reserved : 30;
 } pmuacr_el1_t;
 
-void set_pmsuserenr_el0(pmsuserenr_el0_t encoded_value) {
-    uint64_t* decoded = (uint64_t*)&encoded_value;
-    asm("MSR PMUSERENR_EL0, %x[data]" :: [data] "r" (*decoded) : "memory");
-}
-
-void set_pmuacr_el1_(pmuacr_el1_t encoded_value) {
+void set_pmuacr_el1(pmuacr_el1_t encoded_value) {
     uint64_t* decoded = (uint64_t*)&encoded_value;
     asm("MSR PMUACR_EL1, %x[data]" :: [data] "r" (*decoded) : "memory");
+}
+
+pmuacr_el1_t get_pmuacr_el1_decoded() {
+    uint64_t value = get_pmuacr_el1();
+    pmuacr_el1_t* decoded = (pmuacr_el1_t*)&value;
+    return *decoded;
+}
+
+uint64_t get_current_cpu_frequency() {
+    pmsuserenr_el0_t pms_user = get_pmsuserenr_el0_decoded();
+    pms_user.enable = 1;
+    set_pmsuserenr_el0(pms_user);
+    pmuacr_el1_t pmuac = get_pmuacr_el1_decoded();
+    pmuac.c = 1;
+    uint64_t pmc_counter = get_pmccntr_el0();
+    const uint64_t inital_ticks = get_system_ticks();
+    const uint64_t cycles_100ms = (get_counter_timer_frequency() / 1000) * 100;
+    const uint64_t inital_pm_ticks = get_pmccntr_el0();
+    uint64_t ticks;
+    do {
+        ticks = get_system_ticks();
+    }
+    while (ticks < (inital_ticks + cycles_100ms));
+    return 0;
 }
 
 
