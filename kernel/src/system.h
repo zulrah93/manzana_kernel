@@ -39,7 +39,7 @@ uint64_t get_pmuacr_el1() {
     asm("MRS %x[data], PMUACR_EL1" : [data] "=r" (register_value));
     return register_value;
 }
-
+#pragma pack(push, 1)
 //https://support.arm.com/documentation/100442/0100/debug-registers/aarch64-pmu-registers/pmcr-el0--performance-monitors-control-register--el0
 typedef struct {
     uint8_t enable : 1;
@@ -54,12 +54,19 @@ typedef struct {
     uint8_t id_code;
     uint8_t implementer_code;
 } pmcr_el0_t;
+#pragma pop
 
 pmcr_el0_t get_pmcr_el0_decoded() {
     uint32_t value = get_pmcr_el0();
     pmcr_el0_t* decoded = (pmcr_el0_t*)&value;
     return *decoded;
 }
+
+void set_pmcr_el0(pmcr_el0_t encoded_value) {
+    uint32_t* decoded = (uint32_t*)&encoded_value;
+    asm("MSR PMUACR_EL1, %x[data]" :: [data] "r" (*decoded) : "memory");
+}
+
 
 typedef struct {
     uint8_t enable : 1;
@@ -101,13 +108,19 @@ pmuacr_el1_t get_pmuacr_el1_decoded() {
     return *decoded;
 }
 
-uint64_t get_current_cpu_frequency() {
+uint64_t get_current_cpu_frequency_el1() {
+    pmcr_el0_t pmcr = get_pmcr_el0_decoded();
+    pmcr.enable = 1;
+    pmcr.number_of_event_counters = 1;
+    pmcr.enable_long_cycle_count = 1;
+    pmcr.clock_counter_reset = 1;
+    set_pmcr_el0(pmcr);
     pmsuserenr_el0_t pms_user = get_pmsuserenr_el0_decoded();
     pms_user.enable = 1;
     set_pmsuserenr_el0(pms_user);
     pmuacr_el1_t pmuac = get_pmuacr_el1_decoded();
     pmuac.c = 1;
-    uint64_t pmc_counter = get_pmccntr_el0();
+    set_pmuacr_el1(pmuac);
     const uint64_t inital_ticks = get_system_ticks();
     const uint64_t cycles_100ms = (get_counter_timer_frequency() / 1000) * 100;
     const uint64_t inital_pm_ticks = get_pmccntr_el0();
@@ -116,6 +129,13 @@ uint64_t get_current_cpu_frequency() {
         ticks = get_system_ticks();
     }
     while (ticks < (inital_ticks + cycles_100ms));
+    const uint64_t frequency = ((get_pmccntr_el0() - inital_pm_ticks) / (get_system_ticks() - inital_ticks))
+            * get_counter_timer_frequency();
+    pmcr.enable = 0;
+    pmcr.enable_long_cycle_count = 0;
+    pmcr.clock_counter_reset = 0;
+    set_pmcr_el0(pmcr);
+    return frequency;
     return 0;
 }
 
