@@ -15,6 +15,61 @@ uint64_t get_counter_timer_frequency() {
     return register_value;
 }
 
+uint64_t get_pmccntr_el0() {
+    uint64_t register_value;
+    asm("MRS %x[data], PMCCNTR_EL0" : [data] "=r" (register_value));
+    return register_value;
+}
+
+uint64_t get_pmsuserenr_el0() {
+    uint64_t register_value;
+    asm("MRS %x[data], PMUSERENR_EL0" : [data] "=r" (register_value));
+    return register_value;
+}
+
+
+uint64_t get_pmuacr_el1() {
+    uint64_t register_value;
+    asm("MRS %x[data], PMUACR_EL1" : [data] "=r" (register_value));
+    return register_value;
+}
+
+typedef struct {
+    uint8_t enable : 1;
+    uint8_t sw : 1;
+    uint8_t cr : 1;
+    uint8_t er : 1;
+    uint8_t uen : 1;
+    uint8_t ir : 1;
+    uint8_t tid : 1;
+    uint64_t reserved : 56;
+} pmsuserenr_el0_t;
+
+
+pmsuserenr_el0_t get_pmsuserenr_el0_decoded() {
+    uint64_t value = get_pmsuserenr_el0();
+    pmsuserenr_el0_t* decoded = (pmsuserenr_el0_t*)&value;
+    return *decoded;
+}
+
+typedef struct {
+    uint32_t p : 31;
+    uint8_t c : 1;
+    uint8_t fm : 1;
+    uint32_t reserved : 30;
+} pmuacr_el1_t;
+
+void set_pmsuserenr_el0(pmsuserenr_el0_t encoded_value) {
+    uint64_t* decoded = (uint64_t*)&encoded_value;
+    asm("MSR PMUSERENR_EL0, %x[data]" :: [data] "r" (*decoded) : "memory");
+}
+
+void set_pmuacr_el1_(pmuacr_el1_t encoded_value) {
+    uint64_t* decoded = (uint64_t*)&encoded_value;
+    asm("MSR PMUACR_EL1, %x[data]" :: [data] "r" (*decoded) : "memory");
+}
+
+
 typedef struct {
     uint8_t reserved_1 : 2;
     uint8_t level : 2;
