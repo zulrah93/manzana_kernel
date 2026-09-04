@@ -3,6 +3,46 @@
 
 #include <stdint.h>
 
+uint64_t get_sp_el0() {
+    uint64_t register_value;
+    asm("MRS %x[data], SP_EL0" : [data] "=r" (register_value));
+    return register_value;   
+}
+
+void set_sp_el0(uint64_t stack_pointer) {
+     asm("MSR SP_EL0, %x[data]" :: [data] "r" (stack_pointer) : "memory");
+}
+
+uint64_t get_sp_el1() {
+    uint64_t register_value;
+    asm("MRS %x[data], SP_EL1" : [data] "=r" (register_value));
+    return register_value;   
+}
+
+void set_sp_el1(uint64_t stack_pointer) {
+     asm("MSR SP_EL1, %x[data]" :: [data] "r" (stack_pointer) : "memory");
+}
+uint64_t get_sp_el2() {
+    uint64_t register_value;
+    asm("MRS %x[data], SP_EL2" : [data] "=r" (register_value));
+    return register_value;   
+}
+
+void set_sp_el2(uint64_t stack_pointer) {
+     asm("MSR SP_EL2, %x[data]" :: [data] "r" (stack_pointer) : "memory");
+}
+
+uint64_t get_sp_el3() {
+    uint64_t register_value;
+    asm("MRS %x[data], SP_EL3" : [data] "=r" (register_value));
+    return register_value;   
+}
+
+void set_sp_el3(uint64_t stack_pointer) {
+     asm("MSR SP_EL3, %x[data]" :: [data] "r" (stack_pointer) : "memory");
+}
+
+
 uint64_t get_system_ticks() {
     uint64_t register_value;
     asm("MRS %x[data], CNTPCT_EL0" : [data] "=r" (register_value));
@@ -136,7 +176,6 @@ uint64_t get_current_cpu_frequency_el0() {
     pmcr.clock_counter_reset = 0;
     set_pmcr_el0(pmcr);
     return frequency;
-    return 0;
 }
 
 
