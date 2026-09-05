@@ -3,6 +3,16 @@
 
 #include <stdint.h>
 
+uint64_t get_elr_el1() {
+    uint64_t register_value;
+    asm("MRS %x[data], ELR_EL1" : [data] "=r" (register_value));
+    return register_value;
+}
+
+void set_elr_el1(uint64_t address) {
+     asm("MSR ELR_EL1, %x[data]" :: [data] "r" (address) : "memory");
+}
+
 uint64_t get_sp_el0() {
     uint64_t register_value;
     asm("MRS %x[data], SP_EL0" : [data] "=r" (register_value));
@@ -22,6 +32,7 @@ uint64_t get_sp_el1() {
 void set_sp_el1(uint64_t stack_pointer) {
      asm("MSR SP_EL1, %x[data]" :: [data] "r" (stack_pointer) : "memory");
 }
+
 uint64_t get_sp_el2() {
     uint64_t register_value;
     asm("MRS %x[data], SP_EL2" : [data] "=r" (register_value));
@@ -31,17 +42,6 @@ uint64_t get_sp_el2() {
 void set_sp_el2(uint64_t stack_pointer) {
      asm("MSR SP_EL2, %x[data]" :: [data] "r" (stack_pointer) : "memory");
 }
-
-uint64_t get_sp_el3() {
-    uint64_t register_value;
-    asm("MRS %x[data], SP_EL3" : [data] "=r" (register_value));
-    return register_value;   
-}
-
-void set_sp_el3(uint64_t stack_pointer) {
-     asm("MSR SP_EL3, %x[data]" :: [data] "r" (stack_pointer) : "memory");
-}
-
 
 uint64_t get_system_ticks() {
     uint64_t register_value;
@@ -79,6 +79,7 @@ uint64_t get_pmuacr_el1() {
     asm("MRS %x[data], PMUACR_EL1" : [data] "=r" (register_value));
     return register_value;
 }
+
 #pragma pack(push, 1)
 //https://support.arm.com/documentation/100442/0100/debug-registers/aarch64-pmu-registers/pmcr-el0--performance-monitors-control-register--el0
 typedef struct {
@@ -148,7 +149,7 @@ pmuacr_el1_t get_pmuacr_el1_decoded() {
     return *decoded;
 }
 
-uint64_t get_current_cpu_frequency_el0() {
+ uint64_t get_current_cpu_frequency_el0() {
     pmcr_el0_t pmcr = get_pmcr_el0_decoded();
     pmcr.enable = 1;
     pmcr.number_of_event_counters = 1;
@@ -177,7 +178,6 @@ uint64_t get_current_cpu_frequency_el0() {
     set_pmcr_el0(pmcr);
     return frequency;
 }
-
 
 typedef struct {
     uint8_t reserved_1 : 2;
