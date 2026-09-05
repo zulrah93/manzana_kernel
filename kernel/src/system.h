@@ -3,6 +3,26 @@
 
 #include <stdint.h>
 
+// Source: https://support.arm.com/documentation/100442/0100/register-descriptions/aarch64-system-registers/id-aa64pfr0-el1--aarch64-processor-feature-register-0--el1?lang=en
+typedef struct {
+    uint8_t el0_pmu_version : 3;
+    uint8_t el1_pmu_version : 3;
+    uint8_t el2_pmu_version : 3;
+    uint8_t el3_pmu_version : 3;
+    uint8_t floating_point : 4;
+    uint8_t advanced_simd : 4;
+    uint8_t gic : 4;
+    uint8_t ras : 4;
+    uint32_t reserved : 31;
+}id_aa64pfr0_el1;
+
+id_aa64pfr0_el1 get_id_aa64pfr0_el1() {
+     uint64_t register_value;
+    asm("MRS %x[data], ID_AA64PFR0_EL1" : [data] "=r" (register_value));
+    id_aa64pfr0_el1* decoded = (id_aa64pfr0_el1*)&register_value;
+    return *decoded;
+}
+
 uint64_t get_elr_el1() {
     uint64_t register_value;
     asm("MRS %x[data], ELR_EL1" : [data] "=r" (register_value));
@@ -81,7 +101,7 @@ uint64_t get_pmuacr_el1() {
 }
 
 #pragma pack(push, 1)
-//https://support.arm.com/documentation/100442/0100/debug-registers/aarch64-pmu-registers/pmcr-el0--performance-monitors-control-register--el0
+//Source: https://support.arm.com/documentation/100442/0100/debug-registers/aarch64-pmu-registers/pmcr-el0--performance-monitors-control-register--el0
 typedef struct {
     uint8_t enable : 1;
     uint8_t event_counter_reset : 1;
