@@ -3,4 +3,5 @@
 Jokingly called manzana kernel just for fun maybe I work on it more like my OS.1 project but x86-64 is more documented than apple silicon hardware
 
 # Screenshot
-<img width="1030" height="834" alt="image" src="https://github.com/user-attachments/assets/c30301e9-c15e-4af2-b4c0-c7d9e3752e98" />
+<img width="1030" height="834" alt="image" src="https://github.com/user-attachments/assets/d5773dcb-ceae-45eb-9666-a0f85c22faad" />
+
