@@ -80,8 +80,8 @@ void kmain(void) {
     create_empty_kernel_string(&kernel_buffer, 1024);
     append_c_str_to_kernel_string(&kernel_buffer, "Manzana Kernel\nCNTPCT_EL0 has a value of ");
     append_integer_to_kernel_string(&kernel_buffer, get_system_ticks());
-    append_c_str_to_kernel_string(&kernel_buffer, "\nPMU Version ");
-    append_integer_to_kernel_string(&kernel_buffer, features.el1_pmu_version);
+    append_c_str_to_kernel_string(&kernel_buffer, "\nPMU Version 0b");
+    append_binary_to_kernel_string(&kernel_buffer, features.el1_pmu_version);
     append_c_str_to_kernel_string(&kernel_buffer, " \nAnd we are at exception level ");
     append_integer_to_kernel_string(&kernel_buffer, get_current_exception_level().level);
     append_c_str_to_kernel_string(&kernel_buffer, " and SCTLR_EL1 is 0x");
