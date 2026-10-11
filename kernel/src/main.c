@@ -1,3 +1,4 @@
+#include <limits.h>
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
@@ -74,7 +75,6 @@ void kmain(void) {
     struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
     id_aa64pfr0_el1 features = get_id_aa64pfr0_el1();
     clear_screen(framebuffer, BLUE);
-    draw_bitmap(framebuffer, boot_logo_bmp_header, 0, 280);
     reset_cursor_position();
     kernel_string kernel_buffer;
     create_empty_kernel_string(&kernel_buffer, 1024);
@@ -107,6 +107,25 @@ void kmain(void) {
     aarch64_translation_table_base_register_1_t ttb = get_translation_table_base_register_1_el1_decoded();
     append_hex_to_kernel_string(&kernel_buffer, ttb.base_address);
     print_kernel_string(framebuffer, kernel_buffer, WHITE);
+    bool draw_with_tint = true;
+    size_t initial_ticks = get_system_ticks();
+    
+   do {
+        if (((100000000000ul) + initial_ticks) >= get_system_ticks()) {
+               
+                if (!draw_with_tint) {
+                    draw_bitmap(framebuffer, boot_logo_bmp_header, 250, 280);
+                }
+                else {
+                     //clear_screen_partial(framebuffer, WHITE, 250, 280, 480, 480);
+                    draw_bitmap_with_color_key(framebuffer, boot_logo_bmp_header, 250, 280,  0xffff0000, GREEN);
+                }
+                draw_with_tint ^= true;
+                initial_ticks = get_system_ticks();
+        }
+       
+    }
+    while(true); 
     // We're done, just hang...
     halt_catch_fire();
 }

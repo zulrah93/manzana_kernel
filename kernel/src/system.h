@@ -3,6 +3,13 @@
 
 #include <stdint.h>
 
+uint64_t get_counter_timer_frequency() {
+    uint64_t register_value;
+    asm("MRS %x[data], CNTFRQ_EL0" : [data] "=r" (register_value));
+    return register_value;
+}
+
+
 // Source: https://support.arm.com/documentation/100442/0100/register-descriptions/aarch64-system-registers/id-aa64pfr0-el1--aarch64-processor-feature-register-0--el1?lang=en
 typedef struct {
     uint8_t el0_pmu_version : 3;
@@ -66,12 +73,6 @@ void set_sp_el2(uint64_t stack_pointer) {
 uint64_t get_system_ticks() {
     uint64_t register_value;
     asm("MRS %x[data], CNTPCT_EL0" : [data] "=r" (register_value));
-    return register_value;
-}
-
-uint64_t get_counter_timer_frequency() {
-    uint64_t register_value;
-    asm("MRS %x[data], CNTFRQ_EL0" : [data] "=r" (register_value));
     return register_value;
 }
 
@@ -170,33 +171,7 @@ pmuacr_el1_t get_pmuacr_el1_decoded() {
 }
 
  uint64_t get_current_cpu_frequency_el0() {
-    pmcr_el0_t pmcr = get_pmcr_el0_decoded();
-    pmcr.enable = 1;
-    pmcr.number_of_event_counters = 1;
-    pmcr.enable_long_cycle_count = 1;
-    pmcr.clock_counter_reset = 1;
-    set_pmcr_el0(pmcr);
-    pmsuserenr_el0_t pms_user = get_pmsuserenr_el0_decoded();
-    pms_user.enable = 1;
-    set_pmsuserenr_el0(pms_user);
-    pmuacr_el1_t pmuac = get_pmuacr_el1_decoded();
-    pmuac.c = 1;
-    set_pmuacr_el1(pmuac);
-    const uint64_t inital_ticks = get_system_ticks();
-    const uint64_t cycles_100ms = (get_counter_timer_frequency() / 1000) * 100;
-    const uint64_t inital_pm_ticks = get_pmccntr_el0();
-    uint64_t ticks;
-    do {
-        ticks = get_system_ticks();
-    }
-    while (ticks < (inital_ticks + cycles_100ms));
-    const uint64_t frequency = ((get_pmccntr_el0() - inital_pm_ticks) / (get_system_ticks() - inital_ticks))
-            * get_counter_timer_frequency();
-    pmcr.enable = 0;
-    pmcr.enable_long_cycle_count = 0;
-    pmcr.clock_counter_reset = 0;
-    set_pmcr_el0(pmcr);
-    return frequency;
+    return get_counter_timer_frequency();
 }
 
 typedef struct {

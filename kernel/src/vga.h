@@ -43,6 +43,8 @@ int32_t from_rgb(int8_t red, int8_t green, int8_t blue)
 #define WHITE 0xffffff
 #define BLACK 0x000000
 
+
+
 void clear_screen(const struct limine_framebuffer *frame_buffer, const int32_t rgb)
 {
     if (!frame_buffer)
@@ -84,6 +86,22 @@ void plot_pixel(const struct limine_framebuffer *frame_buffer, const uint32_t x,
     vga_buffer[(y * width) + x + 1] = rgb;
 }
 
+void clear_screen_partial(const struct limine_framebuffer * frame_buffer, const int32_t rgb, const uint32_t x, const uint32_t y, const uint32_t width, const uint32_t height) {
+     if (!frame_buffer)
+        return;
+
+    int32_t *vga_buffer = (int32_t *)frame_buffer->address;
+
+    if (!vga_buffer)
+        return;
+
+    for (size_t true_x = x; true_x < (true_x + width); true_x++) {
+        for(size_t true_y = y; true_y < (true_y + height); true_y++) {
+            plot_pixel(frame_buffer, true_x, true_y, rgb);
+        }
+    }
+}
+
 void plot_pattern(const struct limine_framebuffer* frame_buffer) {
     for (uint32_t x = 0; x < frame_buffer->width; x++) {
         for(uint32_t y = 0; y < frame_buffer->height; y++) {
@@ -92,7 +110,57 @@ void plot_pattern(const struct limine_framebuffer* frame_buffer) {
     }
 }
 
-void draw_bitmap(const struct limine_framebuffer *frame_buffer, const bitmap_header_t *header, const uint32_t x, const uint32_t y)
+void draw_bitmap_with_color_key(const struct limine_framebuffer *frame_buffer, 
+                const bitmap_header_t *header, const uint32_t x, const uint32_t y, int32_t rgb_color_key, int32_t rgb_replace)
+{
+
+    if (NULL == frame_buffer)
+    {
+        return;
+    }
+    if (NULL == header)
+    {
+        return;
+    }
+    if (!(header->magic_field[0] == 'B' && header->magic_field[1] == 'M'))
+    {
+        return;
+    }
+
+    if (header->bits_per_pixel != 32) {
+        return; // We only support 32bpp and uncompressed (raw)
+    }
+
+    int32_t *pixel = (int32_t *)(header+1); // Getting a pointer to the actual pixel data screw the header
+
+    if (NULL == pixel) {
+        return;
+    }
+
+    uint32_t y_offset = 0;
+    const uint32_t pixel_count = (header->width * header->height);
+    const uint32_t pixel_padding = 8;
+
+    for (uint32_t pixel_index = 0; pixel_index < pixel_count; pixel_index++)
+    {
+        if ((pixel_index != 0) && (0 == (pixel_index % header->width))) {
+            y_offset++;
+        }
+        size_t true_index = pixel_count - pixel_index - 1;
+        int32_t current_pixel = pixel[true_index];
+        if ((current_pixel & rgb_color_key) == rgb_color_key) {
+            current_pixel = rgb_replace;
+        }
+        plot_pixel(frame_buffer, 
+            x + (true_index % header->width) + pixel_padding, 
+            y + y_offset + pixel_padding, current_pixel);
+    }
+
+    return;
+}
+
+void draw_bitmap(const struct limine_framebuffer *frame_buffer, 
+            const bitmap_header_t *header, const uint32_t x, const uint32_t y)
 {
 
     if (NULL == frame_buffer)
