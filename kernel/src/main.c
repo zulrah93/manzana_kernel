@@ -75,12 +75,13 @@ void kmain(void) {
     struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
     id_aa64pfr0_el1 features = get_id_aa64pfr0_el1();
     clear_screen(framebuffer, BLUE);
+    draw_bitmap_with_color_key(framebuffer, boot_logo_bmp_header, 250, 280,  0xffff0000, from_rgb(0xff, 0xff, 0x00));
     reset_cursor_position();
     kernel_string kernel_buffer;
     create_empty_kernel_string(&kernel_buffer, 1024);
-    append_c_str_to_kernel_string(&kernel_buffer, "Manzana Kernel\nCNTPCT_EL0 has a value of ");
-    append_integer_to_kernel_string(&kernel_buffer, get_system_ticks());
-    append_c_str_to_kernel_string(&kernel_buffer, "\nPMU Version 0b");
+    append_c_str_to_kernel_string(&kernel_buffer, "Manzana Kernel\nCPU Freq : ");
+    append_integer_to_kernel_string(&kernel_buffer, get_current_cpu_frequency_el0() /  1000000);
+    append_c_str_to_kernel_string(&kernel_buffer, "Mhz \nPMU Version 0b");
     append_binary_to_kernel_string(&kernel_buffer, features.el1_pmu_version);
     append_c_str_to_kernel_string(&kernel_buffer, " \nAnd we are at exception level ");
     append_integer_to_kernel_string(&kernel_buffer, get_current_exception_level().level);
@@ -107,11 +108,12 @@ void kmain(void) {
     aarch64_translation_table_base_register_1_t ttb = get_translation_table_base_register_1_el1_decoded();
     append_hex_to_kernel_string(&kernel_buffer, ttb.base_address);
     print_kernel_string(framebuffer, kernel_buffer, WHITE);
-    bool draw_with_tint = true;
+    /*bool draw_with_tint = true;
     size_t initial_ticks = get_system_ticks();
-    
+    size_t frequency = get_current_cpu_frequency_el0();
    do {
-        if (((100000000000ul) + initial_ticks) >= get_system_ticks()) {
+        size_t delta = (get_system_ticks() - initial_ticks);
+        if (delta > frequency) {
                
                 if (!draw_with_tint) {
                     draw_bitmap(framebuffer, boot_logo_bmp_header, 250, 280);
@@ -125,7 +127,7 @@ void kmain(void) {
         }
        
     }
-    while(true); 
+    while(true); */
     // We're done, just hang...
     halt_catch_fire();
 }

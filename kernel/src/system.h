@@ -126,7 +126,7 @@ pmcr_el0_t get_pmcr_el0_decoded() {
 
 void set_pmcr_el0(pmcr_el0_t encoded_value) {
     uint32_t* decoded = (uint32_t*)&encoded_value;
-    asm("MSR PMUACR_EL1, %x[data]" :: [data] "r" (*decoded) : "memory");
+    asm("MSR PMCR_EL0, %x[data]" :: [data] "r" (*decoded) : "memory");
 }
 
 
@@ -170,8 +170,70 @@ pmuacr_el1_t get_pmuacr_el1_decoded() {
     return *decoded;
 }
 
+uint64_t get_cntvct_el0() {
+    uint64_t register_value;
+    asm("MRS %x[data], CNTVCT_EL0" : [data] "=r" (register_value));
+    return register_value;
+}
+
+typedef struct {
+ uint32_t reserved : 31;
+ uint8_t enable : 1;
+ uint32_t reserved_2;
+}pmcntenset_el0_t;
+
+uint64_t get_pmcntenset_el0() {
+    uint64_t register_value;
+    asm("MRS %x[data], PMCNTENSET_EL0" : [data] "=r" (register_value));
+    return register_value;
+}
+
+pmcntenset_el0_t get_pmcntenset_el0_decoded() {
+    uint64_t value = get_pmcntenset_el0();
+    pmcntenset_el0_t* decoded = (pmcntenset_el0_t*)&value;
+    return *decoded;
+}
+
+void set_pmcntenset_el0(pmcntenset_el0_t encoded_value) {
+    uint64_t* decoded = (uint64_t*)&encoded_value;
+    asm("MSR PMCNTENSET_EL0, %x[data]" :: [data] "r" (*decoded) : "memory");
+}
+
+
  uint64_t get_current_cpu_frequency_el0() {
-    return get_counter_timer_frequency();
+
+    pmcr_el0_t pmcr = get_pmcr_el0_decoded();
+    pmcr.enable = 1;
+    set_pmcr_el0(pmcr);
+
+    pmcntenset_el0_t pmcnent = get_pmcntenset_el0_decoded();
+    pmcnent.enable = 1;
+    set_pmcntenset_el0(pmcnent);
+   
+
+    uint64_t sys_freq, start_time, end_time, start_cycles, end_cycles;
+
+    // Get system timer reference frequency
+    asm volatile("MRS %x[data], cntfrq_el0" : [data] "=r"(sys_freq));
+
+    // Read starting conditions
+    asm volatile("MRS %[data], cntvct_el0" : [data] "=r"(start_time));
+    asm volatile("MRS %[data], pmccntr_el0" : [data] "=r"(start_cycles));
+
+    // Wait for a reasonable slice (e.g., ~10 milliseconds)
+    uint64_t delay_ticks = sys_freq / 100; 
+    do {
+        asm volatile("MRS %[data], cntvct_el0" : [data] "=r"(end_time));
+    } while ((end_time - start_time) < delay_ticks);
+
+    // Read ending cycles
+    asm volatile("MRS %[data], pmccntr_el0" : [data] "=r"(end_cycles));
+
+    // Math: (Delta Cycles / Delta Ticks) * System Frequency
+    uint64_t delta_ticks = end_time - start_time;
+    uint64_t delta_cycles = end_cycles - start_cycles;
+
+    return (delta_cycles * sys_freq) / delta_ticks;
 }
 
 typedef struct {
