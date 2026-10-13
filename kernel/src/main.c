@@ -109,11 +109,10 @@ void kmain(void) {
     aarch64_translation_table_base_register_1_t ttb = get_translation_table_base_register_1_el1_decoded();
     append_hex_to_kernel_string(&kernel_buffer, ttb.base_address);
     print_kernel_string(framebuffer, kernel_buffer, WHITE);
-    bool draw_with_tint = true;
+    bool draw_with_tint = false;
     size_t frequency = get_current_cpu_frequency_el0();
     seed_random(get_system_ticks_2());
    do {
-        sleep(250);
         if (!draw_with_tint) {
             seed_random(get_system_ticks_2());
             draw_bitmap(framebuffer, boot_logo_bmp_header, 250, 280);
@@ -123,6 +122,7 @@ void kmain(void) {
             draw_bitmap_with_random_color_key(framebuffer, boot_logo_bmp_header, 250, 280,  0xffff0000);//, from_rgb(0xff, 0xff, 0x00));
         }
         draw_with_tint ^= true;
+        sleep(10000);
     }
     while(true); 
     // We're done, just hang...

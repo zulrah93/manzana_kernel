@@ -243,7 +243,7 @@ void sleep(uint64_t milliseconds) {
     uint64_t frequency = get_current_cpu_frequency_el0();
     uint64_t initial_ticks = get_system_ticks_2();
     do {
-        if (((10000 * (get_system_ticks_2() - initial_ticks)) /  frequency) > milliseconds) {
+        if (((18000 * (get_system_ticks_2() - initial_ticks)) /  frequency) >= (milliseconds)) {
             return;
         }
     }
