@@ -76,6 +76,12 @@ uint64_t get_system_ticks() {
     return register_value;
 }
 
+uint64_t get_system_ticks_2() {
+    uint64_t register_value;
+    asm("MRS %x[data], CNTVCT_EL0" : [data] "=r" (register_value));
+    return register_value;
+}
+
 uint32_t get_pmcr_el0() {
     uint32_t register_value;
     asm("MRS %x[data], PMCR_EL0" : [data] "=r" (register_value));
@@ -202,38 +208,35 @@ void set_pmcntenset_el0(pmcntenset_el0_t encoded_value) {
 
  uint64_t get_current_cpu_frequency_el0() {
 
-    pmcr_el0_t pmcr = get_pmcr_el0_decoded();
-    pmcr.enable = 1;
-    set_pmcr_el0(pmcr);
+   pmcr_el0_t pmcr = get_pmcr_el0_decoded();
+   pmcr.enable = 1;
+   set_pmcr_el0(pmcr);
 
-    pmcntenset_el0_t pmcnent = get_pmcntenset_el0_decoded();
-    pmcnent.enable = 1;
-    set_pmcntenset_el0(pmcnent);
+   pmcntenset_el0_t pmcnent = get_pmcntenset_el0_decoded();
+   pmcnent.enable = 1;
+   set_pmcntenset_el0(pmcnent);
    
 
-    uint64_t sys_freq, start_time, end_time, start_cycles, end_cycles;
+   uint64_t frequency, start_time, end_time, start_cycles, end_cycles;
 
-    // Get system timer reference frequency
-    asm volatile("MRS %x[data], cntfrq_el0" : [data] "=r"(sys_freq));
 
-    // Read starting conditions
-    asm volatile("MRS %[data], cntvct_el0" : [data] "=r"(start_time));
-    asm volatile("MRS %[data], pmccntr_el0" : [data] "=r"(start_cycles));
+   frequency = get_counter_timer_frequency();
 
-    // Wait for a reasonable slice (e.g., ~10 milliseconds)
-    uint64_t delay_ticks = sys_freq / 100; 
+   start_time = get_system_ticks_2();
+   start_cycles = get_pmccntr_el0();
+
+    uint64_t delay_ticks = frequency / 100; 
     do {
-        asm volatile("MRS %[data], cntvct_el0" : [data] "=r"(end_time));
+      asm volatile("MRS %[data], CNTVCT_EL0" : [data] "=r"(end_time));
     } while ((end_time - start_time) < delay_ticks);
 
-    // Read ending cycles
-    asm volatile("MRS %[data], pmccntr_el0" : [data] "=r"(end_cycles));
 
-    // Math: (Delta Cycles / Delta Ticks) * System Frequency
-    uint64_t delta_ticks = end_time - start_time;
-    uint64_t delta_cycles = end_cycles - start_cycles;
+   end_cycles = get_pmccntr_el0();
 
-    return (delta_cycles * sys_freq) / delta_ticks;
+   uint64_t delta_ticks = end_time - start_time;
+   uint64_t delta_cycles = end_cycles - start_cycles;
+
+   return (delta_cycles * frequency) / delta_ticks;
 }
 
 typedef struct {

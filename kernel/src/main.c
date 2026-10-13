@@ -108,12 +108,12 @@ void kmain(void) {
     aarch64_translation_table_base_register_1_t ttb = get_translation_table_base_register_1_el1_decoded();
     append_hex_to_kernel_string(&kernel_buffer, ttb.base_address);
     print_kernel_string(framebuffer, kernel_buffer, WHITE);
-    /*bool draw_with_tint = true;
-    size_t initial_ticks = get_system_ticks();
+    bool draw_with_tint = true;
+    size_t initial_ticks = get_system_ticks_2();
     size_t frequency = get_current_cpu_frequency_el0();
    do {
-        size_t delta = (get_system_ticks() - initial_ticks);
-        if (delta > frequency) {
+     
+        if ((get_system_ticks_2() - initial_ticks) > (frequency / 8)) {
                
                 if (!draw_with_tint) {
                     draw_bitmap(framebuffer, boot_logo_bmp_header, 250, 280);
@@ -123,11 +123,11 @@ void kmain(void) {
                     draw_bitmap_with_color_key(framebuffer, boot_logo_bmp_header, 250, 280,  0xffff0000, GREEN);
                 }
                 draw_with_tint ^= true;
-                initial_ticks = get_system_ticks();
+                initial_ticks = get_system_ticks_2();
         }
        
     }
-    while(true); */
+    while(true); 
     // We're done, just hang...
     halt_catch_fire();
 }
