@@ -2,6 +2,7 @@
 #define VGA_H
 
 #include <utility.h>
+#include <random.h>
 
 #pragma pack(push, 1)
 typedef struct
@@ -108,6 +109,55 @@ void plot_pattern(const struct limine_framebuffer* frame_buffer) {
             plot_pixel(frame_buffer, x, y, 2*x+y);
         }
     }
+}
+
+void draw_bitmap_with_random_color_key(const struct limine_framebuffer *frame_buffer, 
+                const bitmap_header_t *header, const uint32_t x, const uint32_t y, int32_t rgb_color_key)
+{
+
+    if (NULL == frame_buffer)
+    {
+        return;
+    }
+    if (NULL == header)
+    {
+        return;
+    }
+    if (!(header->magic_field[0] == 'B' && header->magic_field[1] == 'M'))
+    {
+        return;
+    }
+
+    if (header->bits_per_pixel != 32) {
+        return; // We only support 32bpp and uncompressed (raw)
+    }
+
+    int32_t *pixel = (int32_t *)(header+1); // Getting a pointer to the actual pixel data screw the header
+
+    if (NULL == pixel) {
+        return;
+    }
+
+    uint32_t y_offset = 0;
+    const uint32_t pixel_count = (header->width * header->height);
+    const uint32_t pixel_padding = 8;
+
+    for (uint32_t pixel_index = 0; pixel_index < pixel_count; pixel_index++)
+    {
+        if ((pixel_index != 0) && (0 == (pixel_index % header->width))) {
+            y_offset++;
+        }
+        size_t true_index = pixel_count - pixel_index - 1;
+        int32_t current_pixel = pixel[true_index];
+        if ((current_pixel & rgb_color_key) == rgb_color_key) {
+            current_pixel = from_rgb(random() % 0xff, random() % 0xff, random() % 0xff);
+        }
+        plot_pixel(frame_buffer, 
+            x + (true_index % header->width) + pixel_padding, 
+            y + y_offset + pixel_padding, current_pixel);
+    }
+
+    return;
 }
 
 void draw_bitmap_with_color_key(const struct limine_framebuffer *frame_buffer, 

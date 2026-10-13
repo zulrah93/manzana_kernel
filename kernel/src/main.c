@@ -75,7 +75,8 @@ void kmain(void) {
     struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
     id_aa64pfr0_el1 features = get_id_aa64pfr0_el1();
     clear_screen(framebuffer, BLUE);
-    draw_bitmap_with_color_key(framebuffer, boot_logo_bmp_header, 250, 280,  0xffff0000, from_rgb(0xff, 0xff, 0x00));
+    seed_random(get_system_ticks_2());
+    draw_bitmap_with_random_color_key(framebuffer, boot_logo_bmp_header, 250, 280,  0xffff0000);//, from_rgb(0xff, 0xff, 0x00));
     reset_cursor_position();
     kernel_string kernel_buffer;
     create_empty_kernel_string(&kernel_buffer, 1024);
@@ -109,19 +110,19 @@ void kmain(void) {
     append_hex_to_kernel_string(&kernel_buffer, ttb.base_address);
     print_kernel_string(framebuffer, kernel_buffer, WHITE);
     bool draw_with_tint = true;
-    size_t initial_ticks = get_system_ticks_2();
     size_t frequency = get_current_cpu_frequency_el0();
+    seed_random(get_system_ticks_2());
    do {
         sleep(250);
         if (!draw_with_tint) {
+            seed_random(get_system_ticks_2());
             draw_bitmap(framebuffer, boot_logo_bmp_header, 250, 280);
         }
         else {
                 //clear_screen_partial(framebuffer, WHITE, 250, 280, 480, 480);
-            draw_bitmap_with_color_key(framebuffer, boot_logo_bmp_header, 250, 280,  0xffff0000, from_rgb(0xff, 0xff, 0x00));
+            draw_bitmap_with_random_color_key(framebuffer, boot_logo_bmp_header, 250, 280,  0xffff0000);//, from_rgb(0xff, 0xff, 0x00));
         }
         draw_with_tint ^= true;
-        initial_ticks = get_system_ticks_2();
     }
     while(true); 
     // We're done, just hang...
