@@ -112,20 +112,16 @@ void kmain(void) {
     size_t initial_ticks = get_system_ticks_2();
     size_t frequency = get_current_cpu_frequency_el0();
    do {
-     
-        if ((get_system_ticks_2() - initial_ticks) > (frequency / 8)) {
-               
-                if (!draw_with_tint) {
-                    draw_bitmap(framebuffer, boot_logo_bmp_header, 250, 280);
-                }
-                else {
-                     //clear_screen_partial(framebuffer, WHITE, 250, 280, 480, 480);
-                    draw_bitmap_with_color_key(framebuffer, boot_logo_bmp_header, 250, 280,  0xffff0000, GREEN);
-                }
-                draw_with_tint ^= true;
-                initial_ticks = get_system_ticks_2();
+        sleep(250);
+        if (!draw_with_tint) {
+            draw_bitmap(framebuffer, boot_logo_bmp_header, 250, 280);
         }
-       
+        else {
+                //clear_screen_partial(framebuffer, WHITE, 250, 280, 480, 480);
+            draw_bitmap_with_color_key(framebuffer, boot_logo_bmp_header, 250, 280,  0xffff0000, from_rgb(0xff, 0xff, 0x00));
+        }
+        draw_with_tint ^= true;
+        initial_ticks = get_system_ticks_2();
     }
     while(true); 
     // We're done, just hang...

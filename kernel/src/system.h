@@ -78,7 +78,7 @@ uint64_t get_system_ticks() {
 
 uint64_t get_system_ticks_2() {
     uint64_t register_value;
-    asm("MRS %x[data], CNTVCT_EL0" : [data] "=r" (register_value));
+    asm volatile("MRS %x[data], CNTVCT_EL0" : [data] "=r" (register_value));
     return register_value;
 }
 
@@ -225,7 +225,7 @@ void set_pmcntenset_el0(pmcntenset_el0_t encoded_value) {
    start_time = get_system_ticks_2();
    start_cycles = get_pmccntr_el0();
 
-    uint64_t delay_ticks = frequency / 5000; 
+    uint64_t delay_ticks = frequency / 100; 
     do {
       asm volatile ("MRS %[data], CNTVCT_EL0" : [data] "=r"(end_time));
     } while ((end_time - start_time) < delay_ticks);
@@ -237,6 +237,17 @@ void set_pmcntenset_el0(pmcntenset_el0_t encoded_value) {
    uint64_t delta_cycles = end_cycles - start_cycles;
 
    return (delta_cycles * frequency) / delta_ticks;
+}
+
+void sleep(uint64_t milliseconds) {
+    uint64_t frequency = get_current_cpu_frequency_el0();
+    uint64_t initial_ticks = get_system_ticks_2();
+    do {
+        if (((10000 * (get_system_ticks_2() - initial_ticks)) /  frequency) > milliseconds) {
+            return;
+        }
+    }
+    while (true);
 }
 
 typedef struct {
