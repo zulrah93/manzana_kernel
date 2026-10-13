@@ -225,9 +225,9 @@ void set_pmcntenset_el0(pmcntenset_el0_t encoded_value) {
    start_time = get_system_ticks_2();
    start_cycles = get_pmccntr_el0();
 
-    uint64_t delay_ticks = frequency / 100; 
+    uint64_t delay_ticks = frequency / 5000; 
     do {
-      asm volatile("MRS %[data], CNTVCT_EL0" : [data] "=r"(end_time));
+      asm volatile ("MRS %[data], CNTVCT_EL0" : [data] "=r"(end_time));
     } while ((end_time - start_time) < delay_ticks);
 
 
