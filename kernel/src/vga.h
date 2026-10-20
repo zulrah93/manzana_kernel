@@ -285,8 +285,14 @@ void draw_bitmap(const struct limine_framebuffer *frame_buffer,
        const int32_t pixel = pixels[pixel_index];
        const uint32_t true_x = pixel_index % header->width;
        const uint32_t true_y = header->height - (pixel_index / header->width) - 1;
-       if (tile_info && (true_x < tile_info->width) && (true_y < tile_info->height)) {
-            plot_pixel(frame_buffer, true_x + x, true_y + y, pixel);
+       if (tile_info && (true_x < ((tile_info->tile_index + 1) * tile_info->width) && (true_y < ((tile_info->tile_index + 1) * tile_info->height)))){
+            if (true_x < (((tile_info->tile_index + 1) * tile_info->width) - tile_info->width)) {
+                continue;
+            }
+            if (true_y < (((tile_info->tile_index + 1) * tile_info->height) - tile_info->height)) {
+                continue;
+            }
+            plot_pixel(frame_buffer, true_x + x - ((tile_info->tile_index + 1) * tile_info->width), true_y + y - ((tile_info->tile_index + 1) * tile_info->height), pixel);
        }
        if (!tile_info) {
             plot_pixel(frame_buffer, true_x + x, true_y + y, pixel);

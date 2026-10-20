@@ -76,11 +76,6 @@ void kmain(void) {
     id_aa64pfr0_el1 features = get_id_aa64pfr0_el1();
     clear_screen(framebuffer, BLUE);
     seed_random(get_system_ticks_2());
-    tile_info_t tile_info;
-    tile_info.width = 48;
-    tile_info.height = 48;
-    tile_info.tile_index = 0;
-    draw_bitmap(framebuffer, boot_logo_bmp_header, 250, 150, &tile_info);// &tile_info);//, from_rgb(0xff, 0xff, 0x00));
     reset_cursor_position();
     kernel_string kernel_buffer;
     create_empty_kernel_string(&kernel_buffer, 1024);
@@ -113,23 +108,23 @@ void kmain(void) {
     aarch64_translation_table_base_register_1_t ttb = get_translation_table_base_register_1_el1_decoded();
     append_hex_to_kernel_string(&kernel_buffer, ttb.base_address);
     print_kernel_string(framebuffer, kernel_buffer, WHITE);
-  //  bool draw_with_tint = false;
-   // size_t frequency = get_current_cpu_frequency_el0();
-  //  seed_random(get_system_ticks_2());
- //  do {
- //       if (!draw_with_tint) {
- //           seed_random(get_system_ticks_2());
-          //  draw_bitmap(framebuffer, boot_logo_bmp_header, 250, 280);
- //       }
-       // else {
-                //clear_screen_partial(framebuffer, WHITE, 250, 280, 480, 480);
-            //draw_bitmap_with_random_color_key(framebuffer, boot_logo_bmp_header, 250, 280,  0xffff0000);//, from_rgb(0xff, 0xff, 0x00));
-      ////// ////     draw_bitmap_with_color_key(framebuffer, boot_logo_bmp_header, 250, 280,  0xffff0000, from_rgb(0xff, 0xff, 0x00));
-      //  }
-     //   draw_with_tint ^= true;
-  //      sleep(300);
-  //  }
-  //  while(true); 
+    tile_info_t tile_info;
+    tile_info.width = 48;
+    tile_info.height = 48;
+    tile_info.tile_index = 0;
+    size_t frequency = get_current_cpu_frequency_el0();
+    seed_random(get_system_ticks_2());
+     do {
+       draw_bitmap(framebuffer, boot_logo_bmp_header, 250, 250, &tile_info);
+       sleep(300);
+       tile_info.tile_index++;
+       if (tile_info.tile_index > 100) {
+            tile_info.width = 48;
+            tile_info.height = 48;
+            tile_info.tile_index = 0;
+       }
+   }
+   while(true); 
     // We're done, just hang...
     halt_catch_fire();
 }
