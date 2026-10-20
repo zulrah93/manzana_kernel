@@ -26,10 +26,16 @@ typedef struct
 #pragma pack(pop)
 
 extern bitmap_header_t _binary_src_boot_logo_bmp_start;
+extern bitmap_header_t _binary_src_boot_animation_bmp_start;
 
 bitmap_header_t *get_embedded_boot_logo()
 {
     return (bitmap_header_t *)&_binary_src_boot_logo_bmp_start;
+}
+
+bitmap_header_t *get_boot_sprite_sheet()
+{
+    return (bitmap_header_t *)&_binary_src_boot_animation_bmp_start;
 }
 
 // Takes three bytes (red, green, blue) and returns a 32-bit integer representing the color
@@ -87,14 +93,41 @@ void plot_pixel(const struct limine_framebuffer *frame_buffer, const uint32_t x,
     vga_buffer[(y * width) + x + 1] = rgb;
 }
 
-void clear_screen_partial(const struct limine_framebuffer * frame_buffer, const int32_t rgb, const uint32_t x, const uint32_t y, const uint32_t width, const uint32_t height) {
-     if (!frame_buffer)
+void copy_pixels(const struct limine_framebuffer* frame_buffer, const uint32_t x, const uint32_t y, 
+                                                    const uint32_t width, const uint32_t height, const int32_t* pixel_data
+                                                ) {
+    if (!frame_buffer || !pixel_data)
+        return;
+
+    const uint32_t frame_width = frame_buffer->width;
+    const uint32_t frame_height = frame_buffer->height;
+
+    if (x > frame_width) // Out of bounds
+        return;
+    if (y > frame_height) // Out of bounds
         return;
 
     int32_t *vga_buffer = (int32_t *)frame_buffer->address;
 
-    if (!vga_buffer)
+    if (!vga_buffer) {
         return;
+    }
+
+    for(int32_t true_y = height; true_y >= 0; true_y--) {
+        memcpy(&vga_buffer[((true_y + y) * width) + x + 1], pixel_data, width);
+    }
+}
+
+void clear_screen_partial(const struct limine_framebuffer * frame_buffer, const int32_t rgb, const uint32_t x, const uint32_t y, const uint32_t width, const uint32_t height) {
+     if (!frame_buffer) {
+        return;
+     }
+
+    int32_t *vga_buffer = (int32_t *)frame_buffer->address;
+
+    if (!vga_buffer) {
+        return;
+    }
 
     for (size_t true_x = x; true_x < (true_x + width); true_x++) {
         for(size_t true_y = y; true_y < (true_y + height); true_y++) {
@@ -209,8 +242,16 @@ void draw_bitmap_with_color_key(const struct limine_framebuffer *frame_buffer,
     return;
 }
 
+
+typedef struct {
+  uint32_t width;
+  uint32_t height;
+  size_t tile_index;
+} tile_info_t;
+
+
 void draw_bitmap(const struct limine_framebuffer *frame_buffer, 
-            const bitmap_header_t *header, const uint32_t x, const uint32_t y)
+            const bitmap_header_t *header, const uint32_t x, const uint32_t y, tile_info_t* tile_info)
 {
 
     if (NULL == frame_buffer)
@@ -230,26 +271,27 @@ void draw_bitmap(const struct limine_framebuffer *frame_buffer,
         return; // We only support 32bpp and uncompressed (raw)
     }
 
-    int32_t *pixel = (int32_t *)(header+1); // Getting a pointer to the actual pixel data screw the header
+    int32_t *pixels = (int32_t *)(header+1); // Getting a pointer to the actual pixel data screw the header
 
-    if (NULL == pixel) {
+    if (NULL == pixels) {
         return;
     }
 
-    uint32_t y_offset = 0;
-    const uint32_t pixel_count = (header->width * header->height);
-    const uint32_t pixel_padding = 8;
+    //copy_pixels(frame_buffer, x, y, header->width, header->height, pixel);
 
-    for (uint32_t pixel_index = 0; pixel_index < pixel_count; pixel_index++)
-    {
-        if ((pixel_index != 0) && (0 == (pixel_index % header->width))) {
-            y_offset++;
-        }
-        size_t true_index = pixel_count - pixel_index - 1;
-        int32_t current_pixel = pixel[true_index];
-        plot_pixel(frame_buffer, 
-            x + (true_index % header->width) + pixel_padding, 
-            y + y_offset + pixel_padding, current_pixel);
+    const size_t row_size = ((header->width * header->bits_per_pixel) / 32);
+
+    for(size_t pixel_index = 0; pixel_index < (row_size * header->height); pixel_index++) {
+       const int32_t pixel = pixels[pixel_index];
+       const uint32_t true_x = pixel_index % header->width;
+       const uint32_t true_y = header->height - (pixel_index / header->width) - 1;
+       if (tile_info && (true_x < tile_info->width) && (true_y < tile_info->height)) {
+            plot_pixel(frame_buffer, true_x + x, true_y + y, pixel);
+       }
+       if (!tile_info) {
+            plot_pixel(frame_buffer, true_x + x, true_y + y, pixel);
+       }
+       
     }
 
     return;
